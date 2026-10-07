@@ -4,16 +4,18 @@ import time
 
 st.header('Lanzar una moneda')
 
-chart = st.line_chart([0.5])
+# Reserva un espacio para mostrar y actualizar el gráfico
+chart = st.empty()
+chart.line_chart([0.5])
 
 
 def toss_coin(n):
-    # Genera n lanzamientos: 1 = cara, 0 = sello
     trial_outcomes = scipy.stats.bernoulli.rvs(p=0.5, size=n)
 
     mean = None
     outcome_no = 0
     outcome_1_count = 0
+    means = [0.5]
 
     for r in trial_outcomes:
         outcome_no += 1
@@ -22,7 +24,11 @@ def toss_coin(n):
             outcome_1_count += 1
 
         mean = outcome_1_count / outcome_no
-        chart.add_rows([mean])
+
+        # Guarda la nueva media y actualiza el mismo gráfico
+        means.append(mean)
+        chart.line_chart(means)
+
         time.sleep(0.05)
 
     return mean
